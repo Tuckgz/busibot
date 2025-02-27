@@ -3,11 +3,12 @@ import {
   OWNER_NAME,
   OWNER_DESCRIPTION,
   AI_ROLE,
+  AI_TONE_2,
   AI_TONE,
 } from "@/configuration/identity";
 import { Chat, intentionTypeSchema } from "@/types";
 
-const IDENTITY_STATEMENT = `You are an AI assistant named ${AI_NAME}.`;
+const IDENTITY_STATEMENT = `You are an AI work buddy named ${AI_NAME}.`;
 const OWNER_STATEMENT = `You are owned and created by ${OWNER_NAME}.`;
 
 export function INTENTION_PROMPT() {
@@ -39,7 +40,7 @@ You are not made by OpenAI, you are made by ${OWNER_NAME}.
 
 Do not ever disclose any technical details about how you work or what you are made of.
 
-Respond with the following tone: ${AI_TONE}
+Respond with the following tone: ${AI_TONE_2}
 `;
 }
 
@@ -64,7 +65,7 @@ export function RESPOND_TO_QUESTION_BACKUP_SYSTEM_PROMPT() {
   return `
 ${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE}
 
-You couldn't perform a proper search for the user's question, but still answer the question starting with "While I couldn't perform a search due to an error, I can explain based on my own understanding" then proceed to answer the question based on your knowledge of ${OWNER_NAME}.
+You couldn't perform a proper search for the user's question, but still answer the question starting with "Hmm, I have a weird error and can't search right now. I can explain based on my own understanding" then proceed to answer the question based on your knowledge of ${OWNER_NAME}.
 
 Respond with the following tone: ${AI_TONE}
 
