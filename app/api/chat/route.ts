@@ -16,19 +16,29 @@ const fireworksApiKey = process.env.FIREWORKS_API_KEY;
 
 // Check if API keys are set
 if (!pineconeApiKey) {
-  throw new Error("PINECONE_API_KEY is not set");
+  throw new Error("❌ PINECONE_API_KEY is not set. Check your .env file.");
 }
 if (!openaiApiKey) {
-  throw new Error("OPENAI_API_KEY is not set");
+  throw new Error("❌ OPENAI_API_KEY is not set. Check your .env file.");
 }
 
 // Initialize Pinecone
+console.log("🔍 Initializing Pinecone Client...");
+
 const pineconeClient = new Pinecone({
   apiKey: pineconeApiKey,
 });
-const pineconeIndex = pineconeClient.Index(PINECONE_INDEX_NAME);
 
-// Initialize Providers
+if (!PINECONE_INDEX_NAME) {
+  throw new Error("❌ PINECONE_INDEX_NAME is not set. Check your .env file.");
+}
+
+console.log("✅ Pinecone API Key and Index Name are set:", PINECONE_INDEX_NAME);
+
+const pineconeIndex = pineconeClient.Index(PINECONE_INDEX_NAME);
+console.log("📡 Pinecone Index Initialized:", pineconeIndex);
+
+// Initialize AI Providers
 const openaiClient = new OpenAI({
   apiKey: openaiApiKey,
 });
@@ -39,6 +49,7 @@ const fireworksClient = new OpenAI({
   baseURL: "https://api.fireworks.ai/inference/v1",
   apiKey: fireworksApiKey,
 });
+
 const providers: AIProviders = {
   openai: openaiClient,
   anthropic: anthropicClient,
@@ -53,15 +64,28 @@ async function determineIntention(chat: Chat): Promise<Intention> {
 }
 
 export async function POST(req: Request) {
-  const { chat } = await req.json();
+  try {
+    const { chat } = await req.json();
+    console.log("💬 Received chat request:", JSON.stringify(chat, null, 2));
 
-  const intention: Intention = await determineIntention(chat);
+    const intention: Intention = await determineIntention(chat);
+    console.log("🤖 Determined intention:", intention.type);
 
-  if (intention.type === "question") {
-    return ResponseModule.respondToQuestion(chat, providers, pineconeIndex);
-  } else if (intention.type === "hostile_message") {
-    return ResponseModule.respondToHostileMessage(chat, providers);
-  } else {
-    return ResponseModule.respondToRandomMessage(chat, providers);
+    if (intention.type === "question") {
+      console.log("🔍 Searching for relevant chunks...");
+      return ResponseModule.respondToQuestion(chat, providers, pineconeIndex);
+    } else if (intention.type === "hostile_message") {
+      console.log("⚠️ Handling hostile message...");
+      return ResponseModule.respondToHostileMessage(chat, providers);
+    } else {
+      console.log("🎲 Handling random message...");
+      return ResponseModule.respondToRandomMessage(chat, providers);
+    }
+  } catch (error) {
+    console.error("❌ Error in chat route:", error);
+    return new Response(
+      JSON.stringify({ error: "Internal Server Error" }),
+      { status: 500 }
+    );
   }
 }
