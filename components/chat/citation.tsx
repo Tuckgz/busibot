@@ -27,8 +27,8 @@ export function CitationCircle({
       return false;
     }
   };
-  const hasSourceUrl = isValidUrl(citation.source_url);
-  const hasSourceDescription = citation.source_description.trim() !== "";
+
+  const hasSourceUrl = isValidUrl(citation.file);
 
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
@@ -43,17 +43,19 @@ export function CitationCircle({
       <TooltipContent>
         <div className="bg-white p-2 rounded-md shadow-sm flex flex-col justify-center border-[1px] border-gray-200">
           <p>
-            {hasSourceUrl && (
+            {hasSourceUrl ? (
               <Link
-                href={citation.source_url}
+                href={citation.file}
                 target="_blank"
                 className="text-blue-500 hover:underline text-sm"
               >
-                {citation.source_description}
+                {`Source: Chunk #${citation.chunk_index}`}
               </Link>
+            ) : citation.chunk_index !== undefined ? (
+              `Chunk #${citation.chunk_index}`
+            ) : (
+              EMPTY_CITATION_MESSAGE
             )}
-            {!hasSourceUrl && citation.source_description}
-            {!hasSourceUrl && !hasSourceDescription && EMPTY_CITATION_MESSAGE}
           </p>
         </div>
       </TooltipContent>
