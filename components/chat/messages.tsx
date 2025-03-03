@@ -25,7 +25,11 @@ function UserMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 bg-blue-500 rounded-2xl text-white max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        style={{
+          backgroundColor: "hsl(120, 40%, 75%)", // Light forest green
+          color: "hsl(120, 40%, 25%)", // Dark forest green text
+        }}
       >
         {message.content}
       </motion.div>
@@ -45,7 +49,11 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 bg-gray-200 rounded-2xl text-black max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        style={{
+          backgroundColor: "hsl(30, 50%, 80%)", // Light brown
+          color: "hsl(30, 50%, 30%)", // Dark brown text
+        }}
       >
         <Formatting message={message} />
       </motion.div>
