@@ -52,11 +52,11 @@ export function CitationCircle({
     return strippedUrl;
   };
 
-  const hasSourceUrl = isValidUrl(citation.source_url) || true;
-  const hasSourceDescription = citation.source_description.trim() !== "";
-
-  // Get the actual URL to be used for the link.
+  // Compute the actual URL and then check its validity.
   const actual_url = getActualUrl(citation.source_url);
+  const isActualUrlValid = isValidUrl(actual_url);
+
+  const hasSourceDescription = citation.source_description.trim() !== "";
 
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
@@ -70,24 +70,20 @@ export function CitationCircle({
       </TooltipTrigger>
       <TooltipContent>
         <div className="bg-white p-2 rounded-md shadow-sm border border-gray-200 max-w-xs">
-          {hasSourceUrl ? (
-            <>
-              <Link
-                href={actual_url}
-                target="_blank"
-                className="text-blue-500 hover:underline text-sm"
-              >
-                {modifyUrl(citation.source_url)}
-              </Link>
-              <div className="mt-1 text-xs text-gray-600 break-words">
-                {citation.source_description}
-              </div>
-            </>
+          {isActualUrlValid ? (
+            <Link
+              href={actual_url}
+              target="_blank"
+              className="text-blue-500 hover:underline text-sm"
+            >
+              {modifyUrl(citation.source_url)}
+            </Link>
           ) : (
-            <div>
-              {citation.source_description || EMPTY_CITATION_MESSAGE}
-            </div>
+            <span className="text-sm">{modifyUrl(citation.source_url)}</span>
           )}
+          <div className="mt-1 text-xs text-gray-600 break-words">
+            {citation.source_description || EMPTY_CITATION_MESSAGE}
+          </div>
         </div>
       </TooltipContent>
     </Tooltip>
