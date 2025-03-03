@@ -48,7 +48,7 @@ export function CitationCircle({
     const strippedUrl = stripMdExtension(url);
     if (strippedUrl.startsWith("Chapter")) {
       // Remove any spaces so that the chapter can be inserted into the URL.
-      const chapterNoSpaces = strippedUrl.replace(/\s+/g, '');
+      const chapterNoSpaces = strippedUrl.replace(/_/g, "");
       return `https://www.ncleg.gov/Laws/GeneralStatutes/HTML/ByChapter/${chapterNoSpaces}.html`;
     }
     return strippedUrl;
