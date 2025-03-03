@@ -33,6 +33,20 @@ export function CitationCircle({
     return url.endsWith(".md") ? url.slice(0, -3) : url;
   };
 
+  // Additional check to modify the URL if it starts with 'Chapter'
+  const modifyUrl = (url: string) => {
+    // Remove '.md' extension
+    const strippedUrl = stripMdExtension(url);
+
+    // If the URL starts with "Chapter", replace "_" with " " and prepend "NC General Statutes "
+    if (strippedUrl.startsWith("Chapter")) {
+      const modifiedUrl = "NC General Statutes " + strippedUrl.replace(/_/g, " ");
+      return modifiedUrl;
+    }
+
+    return strippedUrl;
+  };
+
   const hasSourceUrl = isValidUrl(citation.source_url) || true;
   const hasSourceDescription = citation.source_description.trim() !== "";
 
@@ -55,8 +69,8 @@ export function CitationCircle({
                 target="_blank"
                 className="text-blue-500 hover:underline text-sm"
               >
-                {/* Display the source URL without '.md' */}
-                {stripMdExtension(citation.source_url)}
+                {/* Display the modified URL */}
+                {modifyUrl(citation.source_url)}
               </Link>
             )}
             {!hasSourceUrl && citation.source_description}
