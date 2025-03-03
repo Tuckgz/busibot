@@ -28,27 +28,37 @@ export function CitationCircle({
     }
   };
 
-  // Check if source_url is valid and remove '.md' if it exists
+  // Remove '.md' extension if it exists.
   const stripMdExtension = (url: string) => {
     return url.endsWith(".md") ? url.slice(0, -3) : url;
   };
 
-  // Additional check to modify the URL if it starts with 'Chapter'
+  // Modify the display text for the URL if it starts with "Chapter".
   const modifyUrl = (url: string) => {
-    // Remove '.md' extension
     const strippedUrl = stripMdExtension(url);
-
-    // If the URL starts with "Chapter", replace "_" with " " and prepend "NC General Statutes "
     if (strippedUrl.startsWith("Chapter")) {
-      const modifiedUrl = "NC General Statutes " + strippedUrl.replace(/_/g, " ");
-      return modifiedUrl;
+      // Replace underscores with spaces.
+      return "NC General Statutes " + strippedUrl.replace(/_/g, " ");
     }
+    return strippedUrl;
+  };
 
+  // Create an actual URL for NC General Statutes if the chapter is provided.
+  const getActualUrl = (url: string) => {
+    const strippedUrl = stripMdExtension(url);
+    if (strippedUrl.startsWith("Chapter")) {
+      // Remove any spaces so that the chapter can be inserted into the URL.
+      const chapterNoSpaces = strippedUrl.replace(/\s+/g, '');
+      return `https://www.ncleg.gov/Laws/GeneralStatutes/HTML/ByChapter/${chapterNoSpaces}.html`;
+    }
     return strippedUrl;
   };
 
   const hasSourceUrl = isValidUrl(citation.source_url) || true;
   const hasSourceDescription = citation.source_description.trim() !== "";
+
+  // Get the actual URL to be used for the link.
+  const actual_url = getActualUrl(citation.source_url);
 
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
@@ -65,11 +75,10 @@ export function CitationCircle({
           <p>
             {hasSourceUrl && (
               <Link
-                href={citation.source_url}
+                href={actual_url}
                 target="_blank"
                 className="text-blue-500 hover:underline text-sm"
               >
-                {/* Display the modified URL */}
                 {modifyUrl(citation.source_url)}
               </Link>
             )}
