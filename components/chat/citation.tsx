@@ -27,7 +27,7 @@ export function CitationCircle({
       return false;
     }
   };
-  const hasSourceUrl = isValidUrl(citation.source_url);
+  const hasSourceUrl = isValidUrl(citation.source_url) || true;
   const hasSourceDescription = citation.source_description.trim() !== "";
 
   return (
