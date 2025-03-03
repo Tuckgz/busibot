@@ -47,8 +47,6 @@ export function CitationCircle({
   const getActualUrl = (url: string) => {
     const strippedUrl = stripMdExtension(url);
     if (strippedUrl.startsWith("Chapter")) {
-      // Remove any spaces so that the chapter can be inserted into the URL.
-      
       return `https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/${strippedUrl}.html`;
     }
     return strippedUrl;
@@ -71,9 +69,9 @@ export function CitationCircle({
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="bg-white p-2 rounded-md shadow-sm flex flex-col justify-center border-[1px] border-gray-200">
-          <p>
-            {hasSourceUrl && (
+        <div className="bg-white p-2 rounded-md shadow-sm border border-gray-200 max-w-xs">
+          {hasSourceUrl ? (
+            <>
               <Link
                 href={actual_url}
                 target="_blank"
@@ -81,10 +79,15 @@ export function CitationCircle({
               >
                 {modifyUrl(citation.source_url)}
               </Link>
-            )}
-            {!hasSourceUrl && citation.source_description}
-            {!hasSourceUrl && !hasSourceDescription && EMPTY_CITATION_MESSAGE}
-          </p>
+              <div className="mt-1 text-xs text-gray-600 break-words">
+                {citation.source_description}
+              </div>
+            </>
+          ) : (
+            <div>
+              {citation.source_description || EMPTY_CITATION_MESSAGE}
+            </div>
+          )}
         </div>
       </TooltipContent>
     </Tooltip>
