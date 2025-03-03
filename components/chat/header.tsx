@@ -9,7 +9,7 @@ import { AI_NAME } from "@/configuration/identity";
 export const AILogo = () => (
   <div className="w-12 h-12 relative">
     <Image src="/ai-logo.png" alt={AI_NAME} width={48} height={48} />
-    {/* Changed the green dot to our forest green tone */}
+    {/* Accent dot in forest green */}
     <div
       className="w-2 h-2 rounded-full absolute -bottom-0.5 -right-0.5"
       style={{ backgroundColor: "hsl(120,40%,25%)" }}
@@ -25,9 +25,8 @@ export default function ChatHeader({
   return (
     <div
       className="z-10 flex justify-center items-center fixed top-0 w-full p-5 shadow-[0_10px_15px_-3px_rgba(30,30,20,0.4)]"
-      // Use a darker light-theme background (rich light brown) and dark brown text
       style={{
-        backgroundColor: "hsl(30,30%,85%)",
+        backgroundColor: "hsl(120, 40%, 55%)", // light forest green, not too light
         color: "hsl(30,30%,20%)",
       }}
     >
