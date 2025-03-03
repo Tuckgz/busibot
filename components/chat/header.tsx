@@ -9,10 +9,10 @@ import { AI_NAME } from "@/configuration/identity";
 export const AILogo = () => (
   <div className="w-12 h-12 relative">
     <Image src="/ai-logo.png" alt={AI_NAME} width={48} height={48} />
-    {/* Accent dot in forest green */}
+    {/* Accent dot in light forest green */}
     <div
       className="w-2 h-2 rounded-full absolute -bottom-0.5 -right-0.5"
-      style={{ backgroundColor: "hsl(120,40%,25%)" }}
+      style={{ backgroundColor: "#8BC493" }} // Light forest green
     ></div>
   </div>
 );
@@ -26,8 +26,8 @@ export default function ChatHeader({
     <div
       className="z-10 flex justify-center items-center fixed top-0 w-full p-5 shadow-[0_10px_15px_-3px_rgba(30,30,20,0.4)]"
       style={{
-        backgroundColor: "hsl(120, 40%, 55%)", // light forest green, not too light
-        color: "hsl(30,30%,20%)",
+        backgroundColor: "hsl(30, 40%, 20%)", // Dark brown
+        color: "hsl(30, 60%, 80%)", // Light brown text
       }}
     >
       <div className="flex w-full">
