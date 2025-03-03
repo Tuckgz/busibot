@@ -49,7 +49,7 @@ export function CitationCircle({
                 target="_blank"
                 className="text-blue-500 hover:underline text-sm"
               >
-                {citation.source_description}
+                {citation.source_url}
               </Link>
             )}
             {!hasSourceUrl && citation.source_description}
