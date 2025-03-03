@@ -27,6 +27,12 @@ export function CitationCircle({
       return false;
     }
   };
+
+  // Check if source_url is valid and remove '.md' if it exists
+  const stripMdExtension = (url: string) => {
+    return url.endsWith(".md") ? url.slice(0, -3) : url;
+  };
+
   const hasSourceUrl = isValidUrl(citation.source_url) || true;
   const hasSourceDescription = citation.source_description.trim() !== "";
 
@@ -49,7 +55,8 @@ export function CitationCircle({
                 target="_blank"
                 className="text-blue-500 hover:underline text-sm"
               >
-                {citation.source_url}
+                {/* Display the source URL without '.md' */}
+                {stripMdExtension(citation.source_url)}
               </Link>
             )}
             {!hasSourceUrl && citation.source_description}
