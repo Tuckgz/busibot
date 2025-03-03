@@ -195,6 +195,7 @@ export function getCitationsFromChunks(chunks: Chunk[]): Citation[] {
     citationSchema.parse({
       source_url: chunk.source_url,
       source_description: chunk.source_description,
+      text: chunk.text,
     })
   );
 }
