@@ -16,13 +16,13 @@ body {
 @layer base {
   :root {
     /* Background and text */
-    --background: 30 30% 95%; /* light brown-ish background */
+    --background: 30 30% 85%; /* Darkened from 95% to 85% for a richer light theme background */
     --foreground: 30 30% 20%; /* dark brown text */
 
     /* Card and popover (e.g., chat bubbles) */
     --card: 30 30% 98%; /* very light brown for chat bubbles */
     --card-foreground: 30 30% 20%;
-    --popover: 30 30% 95%;
+    --popover: 30 30% 85%;
     --popover-foreground: 30 30% 20%;
 
     /* Primary elements (using forest green) */
@@ -64,7 +64,6 @@ body {
     --card-foreground: 30 30% 95%;
     --popover: 30 30% 20%;
     --popover-foreground: 30 30% 95%;
-
     --primary: 120 40% 35%; /* slightly lighter forest green */
     --primary-foreground: 0 0% 100%;
     --secondary: 30 30% 30%;
