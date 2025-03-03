@@ -51,7 +51,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "hsl(30, 50%, 80%)", // Light brown
+          backgroundColor: "#EDED8C", // Warm muted yellow
           color: "hsl(30, 50%, 30%)", // Dark brown text
         }}
       >
