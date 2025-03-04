@@ -74,7 +74,7 @@ export function CitationCircle({
             <Link
               href={actual_url}
               target="_blank"
-              className="text-[#8BC493] hover:underline text-sm"
+              className="text-[#265926] hover:underline text-sm"
             >
               {modifyUrl(citation.source_url)}
             </Link>
