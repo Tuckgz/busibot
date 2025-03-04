@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { DisplayMessage } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -85,31 +84,12 @@ export default function ChatMessages({
     messages.length > 0 &&
     messages[messages.length - 1].role === "user";
 
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    const lastMessage = messagesEndRef.current;
-
-    if (!container || !lastMessage) return;
-
-    // Check if the user is already at the bottom
-    const isAtBottom =
-      container.scrollHeight - container.scrollTop - container.clientHeight < 50;
-
-    if (isAtBottom) {
-      lastMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
-    }
-  }, [messages]);
-
   return (
     <motion.div
-      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col flex-1 p-1 gap-3 overflow-y-auto"
+      className="flex flex-col flex-1 p-1 gap-3"
     >
       <div className="h-[60px]"></div>
       {messages.length === 0 ? (
@@ -131,7 +111,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      <div ref={messagesEndRef} className="h-[20px]"></div> {/* Target for scrolling */}
+      <div className="h-[225px]"></div>
     </motion.div>
   );
 }
