@@ -89,9 +89,9 @@ export default function ChatMessages({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col flex-1 p-1 gap-3"
+      className="flex flex-col flex-1 p-1 gap-3 overflow-auto" // Added overflow-auto
     >
-      <div className="h-[60px]"></div>
+      <div className="h-[60px]"></div> {/* Optional, if you have a header */}
       {messages.length === 0 ? (
         <EmptyMessages />
       ) : (
@@ -111,7 +111,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      <div className="h-[225px]"></div>
+      <div className="h-[255px]"></div> {/* Space at the bottom */}
     </motion.div>
   );
 }
