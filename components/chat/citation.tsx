@@ -62,14 +62,14 @@ export function CitationCircle({
     <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger>
         <div
-          className="bg-[#6B4F3E] text-[#dbcabf] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
+          className="bg-[#6B4F3E] text-[#e8ded8] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
           onClick={() => setOpen(true)}
         >
           <span>{number}</span>
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="bg-[#dbcabf] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
+        <div className="bg-[#e8ded8] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
           {isActualUrlValid ? (
             <Link
               href={actual_url}
