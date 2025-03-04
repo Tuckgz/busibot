@@ -28,6 +28,5 @@ export type Source = z.infer<typeof sourceSchema>;
 export const citationSchema = z.object({
   source_url: z.string(),
   source_description: z.string(),
-  text: z.string(),
 });
 export type Citation = z.infer<typeof citationSchema>;
