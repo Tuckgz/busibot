@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { DisplayMessage } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -84,6 +85,19 @@ export default function ChatMessages({
     messages.length > 0 &&
     messages[messages.length - 1].role === "user";
 
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      // Wait for the latest message to fully render
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        });
+      });
+    }
+  }, [messages]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -111,7 +125,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      <div className="h-[225px]"></div>
+      <div ref={messagesEndRef} className="h-[50px]"></div> {/* Scroll target */}
     </motion.div>
   );
 }
