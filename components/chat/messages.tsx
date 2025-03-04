@@ -85,13 +85,13 @@ export default function ChatMessages({
     messages.length > 0 &&
     messages[messages.length - 1].role === "user";
 
-  // Create a ref for the message container to scroll to the bottom
-  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  // Create a ref for the message container
+  const messageContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Scroll to the bottom whenever the messages change
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
     }
   }, [messages]); // Runs when messages change
 
@@ -101,6 +101,7 @@ export default function ChatMessages({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
       className="flex flex-col flex-1 p-1 gap-3 overflow-y-auto"
+      ref={messageContainerRef} // Attach the ref here
     >
       <div className="h-[60px]"></div>
       {messages.length === 0 ? (
@@ -122,8 +123,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      {/* Empty space at the bottom to ensure scrolling */}
-      <div ref={messagesEndRef} className="h-[10px]"></div>
+      <div className="h-[225px]"></div>
     </motion.div>
   );
 }
