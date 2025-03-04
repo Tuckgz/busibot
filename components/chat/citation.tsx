@@ -62,7 +62,7 @@ export function CitationCircle({
     <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger>
         <div
-          className="bg-[#6B4F3E] text-[#D1B29D] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
+          className="bg-[#6B4F3E] text-[#dbcabf] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
           onClick={() => setOpen(true)}
         >
           <span>{number}</span>
