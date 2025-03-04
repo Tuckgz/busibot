@@ -16,9 +16,31 @@ export class IntentionModule {
     chat: Chat;
     openai: OpenAI;
   }): Promise<Intention> {
-    /**
-     * Determine the intention of the user based on the most recent messages
-     */
+    // Get the last user message in lower case
+    const lastUserMessage = chat.messages
+      .filter((msg) => msg.role === "user")
+      .at(-1)?.content.toLowerCase();
+
+    // Define dataset-related keywords
+    const datasetKeywords = [
+      "training dataset",
+      "training data",
+      "where do you get your data",
+      "sources of training",
+      "what data was used to train",
+    ];
+
+    // If the last message contains any dataset keywords and does NOT include "citation",
+    // classify it as a training dataset question.
+    if (
+      lastUserMessage &&
+      datasetKeywords.some((kw) => lastUserMessage.includes(kw)) &&
+      !lastUserMessage.includes("citation")
+    ) {
+      return { type: "training_dataset_question" };
+    }
+
+    // Fallback to determining intention based on the conversation history.
     const mostRecentMessages = chat.messages
       .slice(-HISTORY_CONTEXT_LENGTH)
       .map((msg) => ({
