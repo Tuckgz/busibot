@@ -16,7 +16,7 @@ body {
 @layer base {
   :root {
     /* Background and text */
-    --background: 30 30% 85%; /* Darkened from 95% to 85% for a richer light theme background */
+    --background: 30 30% 40%; /* Darkened from 95% to 85% for a richer light theme background */
     --foreground: 30 30% 20%; /* dark brown text */
 
     /* Card and popover (e.g., chat bubbles) */
