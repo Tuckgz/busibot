@@ -31,7 +31,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "#FCFCB8",
+          backgroundColor: "#FCF1e0",
           color: "hsl(30, 50%, 30%)", // Dark forest green text
         }}
       >
