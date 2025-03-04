@@ -31,8 +31,8 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "hsl(120, 40%, 75%)", // Light forest green
-          color: "hsl(120, 40%, 25%)", // Dark forest green text
+          backgroundColor: "#FCFCB8",
+          color: "hsl(30, 50%, 30%)", // Dark forest green text
         }}
       >
         {message.content}
@@ -55,7 +55,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "#FCFCB8", // Soft pastel yellow
+          backgroundColor: "#E8DED8", // Soft pastel yellow #FCFCB8
           color: "hsl(30, 50%, 30%)", // Dark brown text
         }}
       >
