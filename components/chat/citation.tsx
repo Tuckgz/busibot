@@ -62,14 +62,14 @@ export function CitationCircle({
     <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger>
         <div
-          className="bg-[#6B4F3E] text-[#3E2C1C] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
+          className="bg-[#6B4F3E] text-[#D1B29D] rounded-full px-2 py-0.5 hover:cursor-pointer hover:scale-105 inline-block"
           onClick={() => setOpen(true)}
         >
           <span>{number}</span>
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="bg-[#3E2C1C] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
+        <div className="bg-[#D1B29D] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
           {isActualUrlValid ? (
             <Link
               href={actual_url}
@@ -79,11 +79,11 @@ export function CitationCircle({
               {modifyUrl(citation.source_url)}
             </Link>
           ) : (
-            <span className="text-sm text-[#D1B29D]">
+            <span className="text-sm text-[#6B4F3E]">
               {modifyUrl(citation.source_url)}
             </span>
           )}
-          <div className="mt-1 text-xs text-[#D1B29D] break-words">
+          <div className="mt-1 text-xs text-[#6B4F3E] break-words">
             {citation.source_description || EMPTY_CITATION_MESSAGE}
           </div>
         </div>
