@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import { DisplayMessage } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -79,6 +80,17 @@ export default function ChatMessages({
   messages: DisplayMessage[];
   indicatorState: LoadingIndicator[];
 }) {
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const hasMounted = useRef(false);
+
+  useEffect(() => {
+    if (hasMounted.current) {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      hasMounted.current = true;
+    }
+  }, [messages, indicatorState]);
+
   const showLoading =
     indicatorState.length > 0 &&
     messages.length > 0 &&
@@ -111,7 +123,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      <div className="h-[225px]"></div>
+      <div ref={bottomRef} className="h-[225px]"></div>
     </motion.div>
   );
 }
