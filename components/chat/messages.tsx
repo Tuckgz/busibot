@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react"; // Import useRef and useEffect
 import { DisplayMessage } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -85,23 +84,12 @@ export default function ChatMessages({
     messages.length > 0 &&
     messages[messages.length - 1].role === "user";
 
-  // Create a ref for the message container
-  const messageContainerRef = useRef<HTMLDivElement | null>(null);
-
-  // Scroll to the bottom whenever the messages change
-  useEffect(() => {
-    if (messageContainerRef.current) {
-      messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
-    }
-  }, [messages]); // Runs when messages change
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col flex-1 p-1 gap-3 overflow-y-auto"
-      ref={messageContainerRef} // Attach the ref here
+      className="flex flex-col flex-1 p-1 gap-3"
     >
       <div className="h-[60px]"></div>
       {messages.length === 0 ? (
