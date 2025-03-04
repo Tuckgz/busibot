@@ -42,6 +42,10 @@ export default function ChatHeader({
             className="gap-2 shadow-sm"
             variant="outline"
             size="sm"
+            style={{
+              color: "hsl(30, 40%, 20%)", // Dark brown text
+              borderColor: "hsl(30, 40%, 30%)", // Slightly lighter brown border for better visibility
+            }}
           >
             <EraserIcon className="w-4 h-4" />
             <span>{CLEAR_BUTTON_TEXT}</span>
