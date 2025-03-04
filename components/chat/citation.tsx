@@ -69,7 +69,7 @@ export function CitationCircle({
         </div>
       </TooltipTrigger>
       <TooltipContent>
-        <div className="bg-[#D1B29D] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
+        <div className="bg-[#dbcabf] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
           {isActualUrlValid ? (
             <Link
               href={actual_url}

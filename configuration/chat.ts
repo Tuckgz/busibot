@@ -1,6 +1,6 @@
 import { OWNER_NAME, AI_NAME } from "./identity";
 
-export const INITIAL_MESSAGE: string = `Yo, I'm ${AI_NAME}, ${OWNER_NAME}'s AI Legal code sifter. Ask away!`;
+export const INITIAL_MESSAGE: string = `Yo, I'm ${AI_NAME}, ${OWNER_NAME}'s AI legal code sifter. I know some business-relevant rules and regulations, and I'm pretty good at googling the things I don't know. Ask away!`;
 export const DEFAULT_RESPONSE_MESSAGE: string = `Oof, I feel dizzy. Can you give me a sec? I need some water before I answer more questions.`;
 export const WORD_CUTOFF: number = 8000; // Number of words until bot says it needs a break
 export const WORD_BREAK_MESSAGE: string = `[WORD BREAK MESSAGE]`;
