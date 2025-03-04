@@ -39,7 +39,7 @@ export default function ChatInput({
             <form
               onSubmit={handleSubmit}
               className={`flex-0 flex w-full p-1 border rounded-full shadow-sm transition-all duration-300 ${
-                isFocused ? "ring-2 ring-[#8BC493] ring-offset-2" : "border-[#C1A17D]"
+                isFocused ? "ring-2 ring-[#A8D8A4] ring-offset-2" : "border-[#8B5E3C]"
               }`}
             >
               <FormField
@@ -52,7 +52,7 @@ export default function ChatInput({
                         {...field}
                         onChange={handleInputChange}
                         value={input}
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0]"
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] pl-4 pr-4" // added padding to the left and right
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder="Type your message here..."
