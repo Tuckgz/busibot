@@ -8,7 +8,10 @@ import { AI_NAME } from "@/configuration/identity";
 
 function AILogo() {
   return (
-    <div className="w-9 h-9">
+    <div
+      className="w-9 h-9 flex items-center justify-center rounded-full border-2"
+      style={{ borderColor: "#8BC493" }} // Light forest green border
+    >
       <Image src="/ai-logo.png" alt={AI_NAME} width={36} height={36} />
     </div>
   );
