@@ -52,7 +52,7 @@ export default function ChatInput({
                         {...field}
                         onChange={handleInputChange}
                         value={input}
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] mx-4" // added margin to the input field
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] ml-4 mr-6" // increased margin-right
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder="Type your message here..."
