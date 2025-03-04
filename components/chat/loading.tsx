@@ -16,7 +16,7 @@ export function Pill({
   return (
     <div
       className={`flex flex-row gap-2 items-center ${
-        isDone ? "text-gray-200" : "text-gray-400 animate-pulse"
+        isDone ? "text-hsl(30, 40%, 40%)" : "text-hsl(30, 40%, 55%) animate-pulse" // Dark brown & medium dark brown
       } ${isError ? "text-red-500" : ""}`}
     >
       {icon === "thinking" && <Brain className="w-4 h-4 animate-pulse" />}
