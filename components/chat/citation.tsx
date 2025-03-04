@@ -9,6 +9,8 @@ import {
 } from "@radix-ui/react-tooltip";
 import Link from "next/link";
 import { EMPTY_CITATION_MESSAGE } from "@/configuration/ui";
+import { ACTUAL_URLS } from "@/components/chat/actualUrls";
+
 
 export function CitationCircle({
   number,
@@ -37,26 +39,24 @@ export function CitationCircle({
   const modifyUrl = (url: string) => {
     const strippedUrl = stripMdExtension(url);
     if (strippedUrl.startsWith("Chapter")) {
-      // Replace underscores with spaces.
       return "NC General Statutes " + strippedUrl.replace(/_/g, " ");
     }
     return strippedUrl;
   };
 
-  // Create an actual URL for NC General Statutes if the chapter is provided.
+  // Create an actual URL based on mappings.
   const getActualUrl = (url: string) => {
     const strippedUrl = stripMdExtension(url);
+    
     if (strippedUrl.startsWith("Chapter")) {
       return `https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/ByChapter/${strippedUrl}.html`;
     }
-    return strippedUrl;
+
+    return ACTUAL_URLS[strippedUrl] || strippedUrl; // Use mapped URL or return original
   };
 
-  // Compute the actual URL and then check its validity.
   const actual_url = getActualUrl(citation.source_url);
   const isActualUrlValid = isValidUrl(actual_url);
-
-  const hasSourceDescription = citation.source_description.trim() !== "";
 
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
