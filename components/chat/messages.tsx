@@ -86,24 +86,30 @@ export default function ChatMessages({
     messages[messages.length - 1].role === "user";
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (messages.length > 0) {
-      // Wait for the latest message to fully render
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-        });
-      });
+    const container = containerRef.current;
+    const lastMessage = messagesEndRef.current;
+
+    if (!container || !lastMessage) return;
+
+    // Check if the user is already at the bottom
+    const isAtBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight < 50;
+
+    if (isAtBottom) {
+      lastMessage.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [messages]);
 
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex flex-col flex-1 p-1 gap-3"
+      className="flex flex-col flex-1 p-1 gap-3 overflow-y-auto"
     >
       <div className="h-[60px]"></div>
       {messages.length === 0 ? (
@@ -125,7 +131,7 @@ export default function ChatMessages({
         ))
       )}
       {showLoading && <Loading indicatorState={indicatorState} />}
-      <div ref={messagesEndRef} className="h-[50px]"></div> {/* Scroll target */}
+      <div ref={messagesEndRef} className="h-[20px]"></div> {/* Target for scrolling */}
     </motion.div>
   );
 }
