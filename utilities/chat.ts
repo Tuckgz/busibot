@@ -16,6 +16,7 @@ import {
 } from "@/types";
 import OpenAI from "openai";
 
+// Strips citations from messages (removes [X] references)
 export function stripMessagesOfCitations(
   messages: DisplayMessage[]
 ): DisplayMessage[] {
@@ -25,6 +26,7 @@ export function stripMessagesOfCitations(
   }));
 }
 
+// Converts display messages to core message format
 export function convertToCoreMessages(
   messages: DisplayMessage[]
 ): CoreMessage[] {
@@ -34,6 +36,7 @@ export function convertToCoreMessages(
   }));
 }
 
+// Adds a system message to the list of core messages
 export function addSystemMessage(
   messages: CoreMessage[],
   systemMessage: string
@@ -41,6 +44,7 @@ export function addSystemMessage(
   return [{ role: "system", content: systemMessage }, ...messages];
 }
 
+// Embeds hypothetical data using OpenAI
 export async function embedHypotheticalData(
   value: string,
   openai: OpenAI
@@ -88,6 +92,7 @@ export async function generateHypotheticalData(
   }
 }
 
+// Searches Pinecone for chunks based on embedding
 export async function searchForChunksUsingEmbedding(
   embedding: number[],
   pineconeIndex: any
@@ -102,11 +107,8 @@ export async function searchForChunksUsingEmbedding(
     return matches.map((match: any) =>
       chunkSchema.parse({
         text: match.metadata?.text ?? "",
-        pre_context: match.metadata?.pre_context ?? "",
-        post_context: match.metadata?.post_context ?? "",
-        source_url: match.metadata?.source_url ?? "",
-        source_description: match.metadata?.source_description ?? "",
-        order: match.metadata?.order ?? 0,
+        chunk_index: match.metadata?.chunk_index ?? 0,  // Adjusted for new metadata
+        file: match.metadata?.file ?? "",  // Adjusted for new metadata
       })
     );
   } catch (error) {
@@ -116,33 +118,36 @@ export async function searchForChunksUsingEmbedding(
   }
 }
 
+// Aggregates chunks into sources (now using `file` and `chunk_index` instead of `source_url` and `source_description`)
 export function aggregateSources(chunks: Chunk[]): Source[] {
   const sourceMap = new Map<string, Source>();
 
   chunks.forEach((chunk) => {
-    if (!sourceMap.has(chunk.source_url)) {
-      sourceMap.set(chunk.source_url, {
+    if (!sourceMap.has(chunk.file)) {
+      sourceMap.set(chunk.file, {
         chunks: [],
-        source_url: chunk.source_url,
-        source_description: chunk.source_description,
+        file: chunk.file, // Using file as source
       });
     }
-    sourceMap.get(chunk.source_url)!.chunks.push(chunk);
+    sourceMap.get(chunk.file)!.chunks.push(chunk);
   });
 
   return Array.from(sourceMap.values());
 }
 
+// Sorts chunks in a source by their `order` field
 export function sortChunksInSourceByOrder(source: Source): Source {
   source.chunks.sort((a, b) => a.order - b.order);
   return source;
 }
 
+// Retrieves the sources from chunks
 export function getSourcesFromChunks(chunks: Chunk[]): Source[] {
   const sources = aggregateSources(chunks);
   return sources.map((source) => sortChunksInSourceByOrder(source));
 }
 
+// Builds the context from ordered chunks for citation
 export function buildContextFromOrderedChunks(
   chunks: Chunk[],
   citationNumber: number
@@ -150,8 +155,7 @@ export function buildContextFromOrderedChunks(
   let context = "";
   for (let i = 0; i < chunks.length; i++) {
     const chunk = chunks[i];
-    context += chunk.pre_context;
-    context += " " + chunk.text + ` [${citationNumber}] `;
+    context += chunk.text + ` [${citationNumber}] `; // Using chunk_index in the citation
     if (
       i === chunks.length - 1 ||
       chunk.post_context !== chunks[i + 1].pre_context
@@ -165,37 +169,43 @@ export function buildContextFromOrderedChunks(
   return context.trim();
 }
 
+// Retrieves context from a source, including citation details
 export function getContextFromSource(
   source: Source,
   citationNumber: number
 ): string {
   return `
     <excerpt>
-    Source Description: ${source.source_description}
     Source Citation: [${citationNumber}]
-    Excerpt from Source [${citationNumber}]:
+    Excerpt from file: ${source.file}, chunk index: ${citationNumber}:
     ${buildContextFromOrderedChunks(source.chunks, citationNumber)}
     </excerpt>
   `;
 }
 
+// Retrieves context from multiple sources
 export function getContextFromSources(sources: Source[]): string {
   return sources
     .map((source, index) => getContextFromSource(source, index + 1))
     .join("\n\n\n");
 }
 
+// Builds the prompt from context (to be used in the system prompt)
 export function buildPromptFromContext(context: string): string {
-  // TODO: yes, this is redundant
   return RESPOND_TO_QUESTION_SYSTEM_PROMPT(context);
 }
 
+// Retrieves citations from chunks using file and chunk_index
 export function getCitationsFromChunks(chunks: Chunk[]): Citation[] {
   return chunks.map((chunk) =>
     citationSchema.parse({
       source_url: chunk.source_url,
       source_description: chunk.source_description,
       text: chunk.text.substring(0, 100),
+
+      file: chunk.file,  // Use file for citation
+      chunk_index: chunk.chunk_index,  // Use chunk index for citation
+
     })
   );
 }

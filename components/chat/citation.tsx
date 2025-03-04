@@ -28,6 +28,7 @@ export function CitationCircle({
     }
   };
 
+
   // Remove '.md' extension if it exists.
   const stripMdExtension = (url: string) => {
     return url.endsWith(".md") ? url.slice(0, -3) : url;
@@ -58,6 +59,9 @@ export function CitationCircle({
 
   const hasSourceDescription = citation.source_description.trim() !== "";
 
+  const hasSourceUrl = isValidUrl(citation.file);
+
+
   return (
     <Tooltip open={open} onOpenChange={setOpen}>
       <TooltipTrigger>
@@ -69,6 +73,7 @@ export function CitationCircle({
         </div>
       </TooltipTrigger>
       <TooltipContent>
+
         <div className="bg-[#e8ded8] p-2 rounded-md shadow-sm border border-[#6B4F3E] max-w-xs">
           {isActualUrlValid ? (
             <Link
@@ -86,6 +91,24 @@ export function CitationCircle({
           <div className="mt-1 text-xs text-[#6B4F3E] break-words">
             {citation.source_description || EMPTY_CITATION_MESSAGE}
           </div>
+
+        <div className="bg-white p-2 rounded-md shadow-sm flex flex-col justify-center border-[1px] border-gray-200">
+          <p>
+            {hasSourceUrl ? (
+              <Link
+                href={citation.file}
+                target="_blank"
+                className="text-blue-500 hover:underline text-sm"
+              >
+                {`Source: Chunk #${citation.chunk_index}`}
+              </Link>
+            ) : citation.chunk_index !== undefined ? (
+              `Chunk #${citation.chunk_index}`
+            ) : (
+              EMPTY_CITATION_MESSAGE
+            )}
+          </p>
+
         </div>
       </TooltipContent>
     </Tooltip>
