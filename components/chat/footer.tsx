@@ -12,7 +12,13 @@ export default function ChatFooter() {
       </div>
       <div className="flex-grow text-center">
         {/* Center Pane */}
+        <a
+          href="https://github.com/Tuckgz/busibot"
+          target="_blank"
+          rel="noopener noreferrer"
+          >
         {FOOTER_MESSAGE}
+        </a>
       </div>
       <div className="flex-grow text-right">
         {/* Right Pane */}
