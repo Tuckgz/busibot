@@ -6,6 +6,7 @@ import { Formatting } from "./formatting";
 import { LoadingIndicator } from "@/types";
 import Loading from "./loading";
 import { AI_NAME } from "@/configuration/identity";
+import { Clipboard } from "lucide-react";
 
 function AILogo() {
   return (
@@ -15,6 +16,22 @@ function AILogo() {
     >
       <Image src="/ai-logo.png" alt={AI_NAME} width={36} height={36} />
     </div>
+  );
+}
+
+function CopyButton({ text }: { text: string }) {
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (error) {
+      console.error("Copy failed", error);
+    }
+  };
+
+  return (
+    <button onClick={copyToClipboard} className="ml-2">
+      <Clipboard size={16} />
+    </button>
   );
 }
 
@@ -29,13 +46,14 @@ function UserMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center"
         style={{
           backgroundColor: "#FCFCB8",
           color: "hsl(30, 50%, 30%)", // Dark forest green text
         }}
       >
         {message.content}
+        <CopyButton text={message.content} />
       </motion.div>
     </motion.div>
   );
@@ -53,13 +71,14 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
+        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center"
         style={{
-          backgroundColor: "#fcf1e0", // Soft pastel yellow #FCFCB8
+          backgroundColor: "#fcf1e0", // Soft pastel yellow
           color: "hsl(30, 50%, 30%)", // Dark brown text
         }}
       >
         <Formatting message={message} />
+        <CopyButton text={message.content} />
       </motion.div>
     </motion.div>
   );
