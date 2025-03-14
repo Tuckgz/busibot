@@ -12,7 +12,7 @@ function AILogo() {
   return (
     <div
       className="w-9 h-9 flex items-center justify-center rounded-full border-2"
-      style={{ borderColor: "#8BC493" }}
+      style={{ borderColor: "#8BC493" }} // Light forest green border
     >
       <Image src="/ai-logo.png" alt={AI_NAME} width={36} height={36} />
     </div>
@@ -25,7 +25,7 @@ type CopyButtonProps = {
   baseBackground: string;
   hoverBackground: string;
   textColor: string;
-  position: "left" | "right";
+  position: "left" | "right"; // New prop to control button position
 };
 
 function CopyButton({
@@ -45,7 +45,7 @@ function CopyButton({
     }
   };
 
-  const buttonPositionClass = position === "left" ? "left-1" : "right-1";
+  const buttonPositionClass = position === "left" ? "left-1" : "right-1"; // Switch left/right
 
   return (
     <button
@@ -80,7 +80,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
   };
 
   const normalBg = "#FCFCB8";
-  const flashBg = "#FFFFD1";
+  const flashBg = "#FFFFD1"; // lighter flash color
   const normalText = "hsl(30, 50%, 30%)";
   const containerStyle = {
     backgroundColor: flash ? flashBg : normalBg,
@@ -103,16 +103,15 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         className="relative pl-10 pr-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={containerStyle}
       >
-        {message.content.split("\n").map((line, index) => (
-          <p key={index} className="whitespace-pre-wrap">{line}</p>
-        ))}
+        {/* Minimal change: wrapping content in a pre tag to preserve new lines */}
+        <pre className="whitespace-pre-wrap m-0">{message.content}</pre>
         <CopyButton
           text={message.content}
           onCopy={triggerFlash}
           baseBackground={normalBg}
           hoverBackground={"#E0E08C"}
           textColor={normalText}
-          position="left"
+          position="left" // Always on the left for user
         />
         {showOverlay && (
           <motion.div
@@ -138,6 +137,31 @@ function UserMessage({ message }: { message: DisplayMessage }) {
 }
 
 function AssistantMessage({ message }: { message: DisplayMessage }) {
+  const [flash, setFlash] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  const triggerFlash = () => {
+    setFlash(true);
+    setShowOverlay(true);
+    setTimeout(() => {
+      setFlash(false);
+    }, 50);
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 1000);
+  };
+
+  const normalBg = "#fcf1e0"; // Soft pastel yellow
+  const flashBg = "#fffce8"; // lighter flash color
+  const normalText = "hsl(30, 50%, 30%)";
+  const containerStyle = {
+    backgroundColor: flash ? flashBg : normalBg,
+    color: flash ? flashBg : normalText,
+    transition: flash ? "none" : "background-color 1s, color 1s",
+  };
+
+  const overlayTextColor = "hsl(30, 50%, 50%)";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -150,19 +174,37 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative pl-3 pr-10 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
-        style={{ backgroundColor: "#fcf1e0", color: "hsl(30, 50%, 30%)" }}
+        style={containerStyle}
       >
-        {message.content.split("\n").map((line, index) => (
-          <p key={index} className="whitespace-pre-wrap">{line}</p>
-        ))}
+        <Formatting message={message} />
+        {/* Minimal change: wrapping content in a pre tag to preserve new lines */}
+        <pre className="whitespace-pre-wrap m-0">{message.content}</pre>
         <CopyButton
           text={message.content}
-          onCopy={() => {}}
-          baseBackground="#fcf1e0"
-          hoverBackground="#e0d9c0"
-          textColor="hsl(30, 50%, 30%)"
-          position="right"
+          onCopy={triggerFlash}
+          baseBackground={normalBg}
+          hoverBackground={"#e0d9c0"}
+          textColor={normalText}
+          position="right" // Move button to the right for assistant
         />
+        {showOverlay && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <span
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                color: overlayTextColor,
+              }}
+            >
+              Copied to Clipboard
+            </span>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );
