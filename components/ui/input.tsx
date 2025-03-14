@@ -1,10 +1,12 @@
-import React, { useState, forwardRef, ChangeEvent } from "react";
+import React, { useState, forwardRef, ChangeEvent, KeyboardEvent } from "react";
 import { cn } from "@/lib/utils";
 
-export interface InputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export interface InputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  onEnterPress?: () => void; // New prop for handling Enter key submission
+}
 
 const Input = forwardRef<HTMLTextAreaElement, InputProps>(
-  ({ className, onInput, onChange, ...props }, ref) => {
+  ({ className, onInput, onChange, onEnterPress, ...props }, ref) => {
     const [height, setHeight] = useState("40px"); // Default height
 
     const handleInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -14,10 +16,15 @@ const Input = forwardRef<HTMLTextAreaElement, InputProps>(
     };
 
     const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-      if (onChange) {
-        onChange(event); // Ensure external onChange is called
+      if (onChange) onChange(event);
+      handleInput(event);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault(); // Prevent newline
+        if (onEnterPress) onEnterPress(); // Trigger form submission
       }
-      handleInput(event); // Handle internal height adjustment
     };
 
     return (
@@ -29,7 +36,8 @@ const Input = forwardRef<HTMLTextAreaElement, InputProps>(
         )}
         rows={1}
         onInput={handleInput}
-        onChange={handleChange} // Handle both onChange and onInput
+        onChange={handleChange}
+        onKeyDown={handleKeyDown} // Handle enter key submission
         style={{ height }}
         {...props}
       />

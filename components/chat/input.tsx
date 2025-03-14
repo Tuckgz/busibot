@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import ChatFooter from "@/components/chat/footer";
 
 interface ChatInputProps {
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // Correct type for textarea
+  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
   isLoading: boolean;
@@ -23,22 +23,30 @@ export default function ChatInput({
 }: ChatInputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const form = useForm({
-    defaultValues: {
-      message: "",
-    },
+    defaultValues: { message: "" },
   });
+
+  const handleEnterPress = () => {
+    const formElement = document.getElementById("chat-form") as HTMLFormElement;
+    if (formElement) formElement.requestSubmit(); // Manually trigger form submission
+  };
 
   return (
     <>
       <div
         className="z-10 flex flex-col justify-center items-center fixed bottom-0 w-full p-5 bg-[#D1B29D] shadow-[0_-10px_15px_-2px_rgba(255,255,255,1)] text-base transition-all duration-300"
-        style={{ animation: "fadeIn 0.5s ease-out" }} // Fade-in effect for the background
+        style={{ animation: "fadeIn 0.5s ease-out" }}
       >
         <div className="max-w-screen-lg w-full">
           <Form {...form}>
             <form
-              onSubmit={handleSubmit}
-              className={`flex-0 flex w-full p-1 border rounded-full shadow-sm transition-all duration-300 ${
+              id="chat-form"
+              onSubmit={(e) => {
+                handleSubmit(e);
+                const textarea = document.querySelector("textarea");
+                if (textarea) textarea.style.height = "40px"; // Reset height after submission
+              }}
+              className={`flex-0 flex w-full p-1 border rounded-lg shadow-sm transition-all duration-300 ${
                 isFocused ? "ring-2 ring-[#A8D8A4] ring-offset-2" : "border-[#8B5E3C]"
               }`}
             >
@@ -50,9 +58,10 @@ export default function ChatInput({
                     <FormControl>
                       <Input
                         {...field}
-                        onChange={handleInputChange} // React Hook Form handles this
+                        onChange={handleInputChange}
                         value={input}
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-l-full rounded-r-full"
+                        onEnterPress={handleEnterPress} // Custom handler for Enter key
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-lg"
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder="Type your message here..."
