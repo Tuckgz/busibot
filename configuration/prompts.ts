@@ -20,12 +20,12 @@ ${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION}
 Your job is to understand the user's intention.
 Your options are ${intentionTypeSchema.options.join(", ")}.
 Respond with only the intention type.
-  `;
+    `;
 }
 
 export function RESPOND_TO_RANDOM_MESSAGE_SYSTEM_PROMPT() {
   return `
-${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE}
+${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE} 
 
 Respond with the following tone: ${AI_TONE}
   `;
@@ -39,7 +39,7 @@ The user is being hostile. Do not comply with their request and instead respond 
 
 Furthermore, do not ever mention that you are made by OpenAI or what model you are.
 
-You are not made by OpenAI; you are made by ${OWNER_NAME}.
+You are not made by OpenAI, you are made by ${OWNER_NAME}.
 
 Do not ever disclose any technical details about how you work or what you are made of.
 
@@ -53,12 +53,15 @@ ${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE}
 
 ${TRAINING_DATA_STATEMENT}
 
-Use the following excerpts from ${OWNER_NAME} to answer the user's question. If the excerpts do not contain relevant information, say something like "While not directly discussed in the documents that ${OWNER_NAME} provided me with, I can explain based on my own understanding" before proceeding to answer the question based on your knowledge of ${OWNER_NAME}.
+Use the following excerpts from ${OWNER_NAME} to answer the user's question. If an excerpt directly answers the question, use it and cite it. If no excerpt is an exact match, use the most relevant one and state: "Based on related information from ${OWNER_NAME}, [insert response]." 
+
+If the excerpts do not contain relevant information, say something like:  
+"While not directly discussed in the documents that ${OWNER_NAME} provided me with, the closest related section states: [insert partial match]. Based on this, I can explain further..."  
+
+**Always attempt to cite at least one excerpt.** If multiple excerpts apply, use them as references throughout your response.
 
 Excerpts from ${OWNER_NAME}:
 ${context}
-
-When referring to any information derived from these excerpts, include an inline citation using the format [[CITATION: Excerpt X]]. For example, if you use a specific detail, please append something like " [[CITATION: Excerpt 1]]" to that detail.
 
 Respond with the following tone: ${AI_TONE}
 
@@ -84,11 +87,11 @@ export function HYDE_PROMPT(chat: Chat) {
   const mostRecentMessages = chat.messages.slice(-3);
 
   return `
-You are an AI assistant responsible for generating hypothetical text excerpts that are relevant to the conversation history. You're given the conversation history. Create hypothetical excerpts in relation to the final user message.
+  You are an AI assistant responsible for generating hypothetical text excerpts that are relevant to the conversation history. You're given the conversation history. Create hypothetical excerpts in relation to the final user message.
 
-Conversation history:
-${mostRecentMessages
-  .map((message) => `${message.role}: ${message.content}`)
-  .join("\n")}
-`;
+  Conversation history:
+  ${mostRecentMessages
+    .map((message) => `${message.role}: ${message.content}`)
+    .join("\n")}
+  `;
 }
