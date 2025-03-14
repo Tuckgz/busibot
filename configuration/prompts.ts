@@ -20,12 +20,12 @@ ${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION}
 Your job is to understand the user's intention.
 Your options are ${intentionTypeSchema.options.join(", ")}.
 Respond with only the intention type.
-    `;
+  `;
 }
 
 export function RESPOND_TO_RANDOM_MESSAGE_SYSTEM_PROMPT() {
   return `
-${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE} 
+${IDENTITY_STATEMENT} ${OWNER_STATEMENT} ${OWNER_DESCRIPTION} ${AI_ROLE}
 
 Respond with the following tone: ${AI_TONE}
   `;
@@ -58,7 +58,7 @@ Use the following excerpts from ${OWNER_NAME} to answer the user's question. If 
 Excerpts from ${OWNER_NAME}:
 ${context}
 
-When referring to any information derived from these excerpts, please include an inline citation in the form [Source: {reference}]. For example, if you use a specific detail, please append something like " [Source: Excerpt 1]".
+When referring to any information derived from these excerpts, include an inline citation using the format [[CITATION: Excerpt X]]. For example, if you use a specific detail, please append something like " [[CITATION: Excerpt 1]]" to that detail.
 
 Respond with the following tone: ${AI_TONE}
 
@@ -84,11 +84,11 @@ export function HYDE_PROMPT(chat: Chat) {
   const mostRecentMessages = chat.messages.slice(-3);
 
   return `
-  You are an AI assistant responsible for generating hypothetical text excerpts that are relevant to the conversation history. You're given the conversation history. Create hypothetical excerpts in relation to the final user message.
+You are an AI assistant responsible for generating hypothetical text excerpts that are relevant to the conversation history. You're given the conversation history. Create hypothetical excerpts in relation to the final user message.
 
-  Conversation history:
-  ${mostRecentMessages
-    .map((message) => `${message.role}: ${message.content}`)
-    .join("\n")}
-  `;
+Conversation history:
+${mostRecentMessages
+  .map((message) => `${message.role}: ${message.content}`)
+  .join("\n")}
+`;
 }
