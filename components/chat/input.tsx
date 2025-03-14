@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import ChatFooter from "@/components/chat/footer";
 
 interface ChatInputProps {
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // Expecting ChangeEvent for textarea
+  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // Correct type for textarea
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
   isLoading: boolean;
