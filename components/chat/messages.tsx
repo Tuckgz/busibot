@@ -103,8 +103,8 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         className="relative pl-10 pr-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={containerStyle}
       >
-        {/* Minimal change: wrapping content in a pre tag to preserve new lines */}
-        <pre className="whitespace-pre-wrap m-0">{message.content}</pre>
+        {/* Replace raw text with a div that preserves whitespace */}
+        <div className="whitespace-pre-wrap m-0">{message.content}</div>
         <CopyButton
           text={message.content}
           onCopy={triggerFlash}
@@ -176,9 +176,8 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         className="relative pl-3 pr-10 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={containerStyle}
       >
+        {/* Use the existing Formatting component for assistant messages */}
         <Formatting message={message} />
-        {/* Minimal change: wrapping content in a pre tag to preserve new lines */}
-        <pre className="whitespace-pre-wrap m-0">{message.content}</pre>
         <CopyButton
           text={message.content}
           onCopy={triggerFlash}
