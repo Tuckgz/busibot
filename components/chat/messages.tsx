@@ -21,7 +21,8 @@ function AILogo() {
 
 type CopyButtonProps = {
   text: string;
-  onCopy?: () => void;
+  onCopy: () => void;
+  // Colors for the button (using same palette as the bubble)
   baseBackground: string;
   hoverBackground: string;
   textColor: string;
@@ -37,7 +38,7 @@ function CopyButton({
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      if (onCopy) onCopy();
+      onCopy();
     } catch (error) {
       console.error("Copy failed", error);
     }
@@ -61,14 +62,37 @@ function CopyButton({
 }
 
 function UserMessage({ message }: { message: DisplayMessage }) {
+  // flash: controls bubble immediate flash state (no transition)
+  // showOverlay: controls display of the "Copied to Clipboard" overlay
   const [flash, setFlash] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+
   const triggerFlash = () => {
     setFlash(true);
-    setTimeout(() => setFlash(false), 200);
+    setShowOverlay(true);
+    // Keep flash color for 50ms (immediate effect), then let it fade back in 1 sec
+    setTimeout(() => {
+      setFlash(false);
+    }, 50);
+    // Remove overlay after 1 sec
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 1000);
   };
 
   const normalBg = "#FCFCB8";
-  const flashBg = "#FFFFD1"; // slightly lighter flash color
+  const flashBg = "#FFFFD1"; // lighter flash color
+  const normalText = "hsl(30, 50%, 30%)";
+  // When flashing, the text flashes to the same color as the flash background.
+  const containerStyle = {
+    backgroundColor: flash ? flashBg : normalBg,
+    color: flash ? flashBg : normalText,
+    transition: flash ? "none" : "background-color 1s, color 1s",
+  };
+
+  // For overlay text: a shade lighter than normal text color.
+  const overlayTextColor = "hsl(30, 50%, 50%)";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -80,10 +104,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
-        style={{
-          backgroundColor: flash ? flashBg : normalBg,
-          color: "hsl(30, 50%, 30%)", // Dark forest green text
-        }}
+        style={containerStyle}
       >
         {message.content}
         <CopyButton
@@ -91,8 +112,26 @@ function UserMessage({ message }: { message: DisplayMessage }) {
           onCopy={triggerFlash}
           baseBackground={normalBg}
           hoverBackground={"#E0E08C"}
-          textColor={"hsl(30, 50%, 30%)"}
+          textColor={normalText}
         />
+        {showOverlay && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <span
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                color: overlayTextColor,
+              }}
+            >
+              Copied to Clipboard
+            </span>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -100,13 +139,30 @@ function UserMessage({ message }: { message: DisplayMessage }) {
 
 function AssistantMessage({ message }: { message: DisplayMessage }) {
   const [flash, setFlash] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
+
   const triggerFlash = () => {
     setFlash(true);
-    setTimeout(() => setFlash(false), 200);
+    setShowOverlay(true);
+    setTimeout(() => {
+      setFlash(false);
+    }, 50);
+    setTimeout(() => {
+      setShowOverlay(false);
+    }, 1000);
   };
 
   const normalBg = "#fcf1e0"; // Soft pastel yellow
-  const flashBg = "#fffce8"; // Lighter flash color
+  const flashBg = "#fffce8"; // lighter flash color
+  const normalText = "hsl(30, 50%, 30%)";
+  const containerStyle = {
+    backgroundColor: flash ? flashBg : normalBg,
+    color: flash ? flashBg : normalText,
+    transition: flash ? "none" : "background-color 1s, color 1s",
+  };
+
+  const overlayTextColor = "hsl(30, 50%, 50%)";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -119,10 +175,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
-        style={{
-          backgroundColor: flash ? flashBg : normalBg,
-          color: "hsl(30, 50%, 30%)", // Dark brown text
-        }}
+        style={containerStyle}
       >
         <Formatting message={message} />
         <CopyButton
@@ -130,8 +183,26 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
           onCopy={triggerFlash}
           baseBackground={normalBg}
           hoverBackground={"#e0d9c0"}
-          textColor={"hsl(30, 50%, 30%)"}
+          textColor={normalText}
         />
+        {showOverlay && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          >
+            <span
+              style={{
+                fontSize: "1.5rem",
+                fontWeight: "bold",
+                color: overlayTextColor,
+              }}
+            >
+              Copied to Clipboard
+            </span>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   );
