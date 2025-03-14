@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { DisplayMessage } from "@/types";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -19,23 +19,56 @@ function AILogo() {
   );
 }
 
-function CopyButton({ text }: { text: string }) {
+type CopyButtonProps = {
+  text: string;
+  onCopy?: () => void;
+  baseBackground: string;
+  hoverBackground: string;
+  textColor: string;
+};
+
+function CopyButton({
+  text,
+  onCopy,
+  baseBackground,
+  hoverBackground,
+  textColor,
+}: CopyButtonProps) {
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(text);
+      if (onCopy) onCopy();
     } catch (error) {
       console.error("Copy failed", error);
     }
   };
 
   return (
-    <button onClick={copyToClipboard} className="ml-2">
+    <button
+      onClick={copyToClipboard}
+      className="absolute bottom-1 right-1 p-1 rounded transition-colors duration-200"
+      style={{ backgroundColor: baseBackground, color: textColor }}
+      onMouseOver={(e) =>
+        (e.currentTarget.style.backgroundColor = hoverBackground)
+      }
+      onMouseOut={(e) =>
+        (e.currentTarget.style.backgroundColor = baseBackground)
+      }
+    >
       <Clipboard size={16} />
     </button>
   );
 }
 
 function UserMessage({ message }: { message: DisplayMessage }) {
+  const [flash, setFlash] = useState(false);
+  const triggerFlash = () => {
+    setFlash(true);
+    setTimeout(() => setFlash(false), 200);
+  };
+
+  const normalBg = "#FCFCB8";
+  const flashBg = "#FFFFD1"; // slightly lighter flash color
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -46,20 +79,34 @@ function UserMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center"
+        className="relative px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "#FCFCB8",
+          backgroundColor: flash ? flashBg : normalBg,
           color: "hsl(30, 50%, 30%)", // Dark forest green text
         }}
       >
         {message.content}
-        <CopyButton text={message.content} />
+        <CopyButton
+          text={message.content}
+          onCopy={triggerFlash}
+          baseBackground={normalBg}
+          hoverBackground={"#E0E08C"}
+          textColor={"hsl(30, 50%, 30%)"}
+        />
       </motion.div>
     </motion.div>
   );
 }
 
 function AssistantMessage({ message }: { message: DisplayMessage }) {
+  const [flash, setFlash] = useState(false);
+  const triggerFlash = () => {
+    setFlash(true);
+    setTimeout(() => setFlash(false), 200);
+  };
+
+  const normalBg = "#fcf1e0"; // Soft pastel yellow
+  const flashBg = "#fffce8"; // Lighter flash color
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -71,14 +118,20 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
       <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        className="px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300 flex items-center"
+        className="relative px-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
         style={{
-          backgroundColor: "#fcf1e0", // Soft pastel yellow
+          backgroundColor: flash ? flashBg : normalBg,
           color: "hsl(30, 50%, 30%)", // Dark brown text
         }}
       >
         <Formatting message={message} />
-        <CopyButton text={message.content} />
+        <CopyButton
+          text={message.content}
+          onCopy={triggerFlash}
+          baseBackground={normalBg}
+          hoverBackground={"#e0d9c0"}
+          textColor={"hsl(30, 50%, 30%)"}
+        />
       </motion.div>
     </motion.div>
   );
