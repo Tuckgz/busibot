@@ -25,6 +25,7 @@ type CopyButtonProps = {
   baseBackground: string;
   hoverBackground: string;
   textColor: string;
+  alignRight?: boolean;
 };
 
 function CopyButton({
@@ -33,6 +34,7 @@ function CopyButton({
   baseBackground,
   hoverBackground,
   textColor,
+  alignRight = false,
 }: CopyButtonProps) {
   const copyToClipboard = async () => {
     try {
@@ -46,7 +48,7 @@ function CopyButton({
   return (
     <button
       onClick={copyToClipboard}
-      className="absolute bottom-1 left-1 p-1 rounded transition-colors duration-200"
+      className={`absolute bottom-1 ${alignRight ? "right-1" : "left-1"} p-1 rounded transition-colors duration-200`}
       style={{ backgroundColor: baseBackground, color: textColor }}
       onMouseOver={(e) =>
         (e.currentTarget.style.backgroundColor = hoverBackground)
@@ -67,24 +69,13 @@ function UserMessage({ message }: { message: DisplayMessage }) {
   const triggerFlash = () => {
     setFlash(true);
     setShowOverlay(true);
-    setTimeout(() => {
-      setFlash(false);
-    }, 50);
-    setTimeout(() => {
-      setShowOverlay(false);
-    }, 1000);
+    setTimeout(() => setFlash(false), 50);
+    setTimeout(() => setShowOverlay(false), 1000);
   };
 
   const normalBg = "#FCFCB8";
-  const flashBg = "#FFFFD1"; // lighter flash color
+  const flashBg = "#FFFFD1";
   const normalText = "hsl(30, 50%, 30%)";
-  const containerStyle = {
-    backgroundColor: flash ? flashBg : normalBg,
-    color: flash ? flashBg : normalText,
-    transition: flash ? "none" : "background-color 1s, color 1s",
-  };
-
-  const overlayTextColor = "hsl(30, 50%, 50%)";
 
   return (
     <motion.div
@@ -97,7 +88,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative pl-10 pr-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
-        style={containerStyle}
+        style={{ backgroundColor: flash ? flashBg : normalBg, color: normalText }}
       >
         {message.content}
         <CopyButton
@@ -106,6 +97,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
           baseBackground={normalBg}
           hoverBackground={"#E0E08C"}
           textColor={normalText}
+          alignRight={false} // Keep on the left
         />
         {showOverlay && (
           <motion.div
@@ -114,13 +106,7 @@ function UserMessage({ message }: { message: DisplayMessage }) {
             transition={{ duration: 1 }}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-            <span
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                color: overlayTextColor,
-              }}
-            >
+            <span style={{ fontSize: "1rem", fontWeight: "normal", color: "hsl(30, 50%, 50%)" }}>
               Copied to Clipboard
             </span>
           </motion.div>
@@ -137,24 +123,13 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
   const triggerFlash = () => {
     setFlash(true);
     setShowOverlay(true);
-    setTimeout(() => {
-      setFlash(false);
-    }, 50);
-    setTimeout(() => {
-      setShowOverlay(false);
-    }, 1000);
+    setTimeout(() => setFlash(false), 50);
+    setTimeout(() => setShowOverlay(false), 1000);
   };
 
   const normalBg = "#fcf1e0"; // Soft pastel yellow
-  const flashBg = "#fffce8"; // lighter flash color
+  const flashBg = "#fffce8"; // Lighter flash color
   const normalText = "hsl(30, 50%, 30%)";
-  const containerStyle = {
-    backgroundColor: flash ? flashBg : normalBg,
-    color: flash ? flashBg : normalText,
-    transition: flash ? "none" : "background-color 1s, color 1s",
-  };
-
-  const overlayTextColor = "hsl(30, 50%, 50%)";
 
   return (
     <motion.div
@@ -168,7 +143,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="relative pl-10 pr-3 py-1 rounded-2xl max-w-[60%] shadow-sm hover:shadow-md transition-shadow duration-300"
-        style={containerStyle}
+        style={{ backgroundColor: flash ? flashBg : normalBg, color: normalText }}
       >
         <Formatting message={message} />
         <CopyButton
@@ -177,6 +152,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
           baseBackground={normalBg}
           hoverBackground={"#e0d9c0"}
           textColor={normalText}
+          alignRight={true} // Move to the right
         />
         {showOverlay && (
           <motion.div
@@ -185,13 +161,7 @@ function AssistantMessage({ message }: { message: DisplayMessage }) {
             transition={{ duration: 1 }}
             className="absolute inset-0 flex items-center justify-center pointer-events-none"
           >
-            <span
-              style={{
-                fontSize: "1.5rem",
-                fontWeight: "bold",
-                color: overlayTextColor,
-              }}
-            >
+            <span style={{ fontSize: "1rem", fontWeight: "normal", color: "hsl(30, 50%, 50%)" }}>
               Copied to Clipboard
             </span>
           </motion.div>
@@ -244,17 +214,8 @@ export default function ChatMessages({
         <EmptyMessages />
       ) : (
         messages.map((message, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 }}
-          >
-            {message.role === "user" ? (
-              <UserMessage message={message} />
-            ) : (
-              <AssistantMessage message={message} />
-            )}
+          <motion.div key={index} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: index * 0.1 }}>
+            {message.role === "user" ? <UserMessage message={message} /> : <AssistantMessage message={message} />}
           </motion.div>
         ))
       )}
