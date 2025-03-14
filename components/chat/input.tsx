@@ -9,7 +9,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import ChatFooter from "@/components/chat/footer";
 
 interface ChatInputProps {
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // FIXED HERE
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
   isLoading: boolean;
@@ -55,7 +55,7 @@ export default function ChatInput({
                       <Input
                         {...field}
                         ref={inputRef}
-                        onChange={handleInputChange}
+                        onChange={handleInputChange} // Now correctly typed
                         value={input}
                         className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-l-full rounded-r-full"
                         onFocus={() => setIsFocused(true)}
