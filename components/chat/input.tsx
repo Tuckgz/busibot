@@ -61,7 +61,6 @@ export default function ChatInput({
                         onChange={handleInputChange}
                         value={input}
                         onEnterPress={handleEnterPress} // Custom handler for Enter key
-                        autoComplete="on" // Minimal change: enable browser autocomplete
                         className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-lg"
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
