@@ -2,14 +2,14 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useState, useRef, FormEvent } from "react";
+import { useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import ChatFooter from "@/components/chat/footer";
 
 interface ChatInputProps {
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // FIXED HERE
+  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // Expecting ChangeEvent for textarea
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   input: string;
   isLoading: boolean;
@@ -22,26 +22,22 @@ export default function ChatInput({
   isLoading,
 }: ChatInputProps) {
   const [isFocused, setIsFocused] = useState(false);
-  const form = useForm({ defaultValues: { message: "" } });
-  const inputRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    handleSubmit(e);
-    if (inputRef.current) {
-      inputRef.current.style.height = "40px"; // Reset height after submission
-    }
-  };
+  const form = useForm({
+    defaultValues: {
+      message: "",
+    },
+  });
 
   return (
     <>
       <div
         className="z-10 flex flex-col justify-center items-center fixed bottom-0 w-full p-5 bg-[#D1B29D] shadow-[0_-10px_15px_-2px_rgba(255,255,255,1)] text-base transition-all duration-300"
-        style={{ animation: "fadeIn 0.5s ease-out" }}
+        style={{ animation: "fadeIn 0.5s ease-out" }} // Fade-in effect for the background
       >
         <div className="max-w-screen-lg w-full">
           <Form {...form}>
             <form
-              onSubmit={handleFormSubmit}
+              onSubmit={handleSubmit}
               className={`flex-0 flex w-full p-1 border rounded-full shadow-sm transition-all duration-300 ${
                 isFocused ? "ring-2 ring-[#A8D8A4] ring-offset-2" : "border-[#8B5E3C]"
               }`}
@@ -54,8 +50,7 @@ export default function ChatInput({
                     <FormControl>
                       <Input
                         {...field}
-                        ref={inputRef}
-                        onChange={handleInputChange} // Now correctly typed
+                        onChange={handleInputChange} // React Hook Form handles this
                         value={input}
                         className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-l-full rounded-r-full"
                         onFocus={() => setIsFocused(true)}

@@ -4,13 +4,20 @@ import { cn } from "@/lib/utils";
 export interface InputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Input = forwardRef<HTMLTextAreaElement, InputProps>(
-  ({ className, onInput, ...props }, ref) => {
+  ({ className, onInput, onChange, ...props }, ref) => {
     const [height, setHeight] = useState("40px"); // Default height
 
     const handleInput = (event: ChangeEvent<HTMLTextAreaElement>) => {
       const target = event.target;
       target.style.height = "40px"; // Reset to default height
-      target.style.height = `${Math.min(target.scrollHeight, 160)}px`; // Expand up to 5 lines (160px max)
+      target.style.height = `${Math.min(target.scrollHeight, 160)}px`; // Expand up to 160px max
+    };
+
+    const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+      if (onChange) {
+        onChange(event); // Ensure external onChange is called
+      }
+      handleInput(event); // Handle internal height adjustment
     };
 
     return (
@@ -22,6 +29,7 @@ const Input = forwardRef<HTMLTextAreaElement, InputProps>(
         )}
         rows={1}
         onInput={handleInput}
+        onChange={handleChange} // Handle both onChange and onInput
         style={{ height }}
         {...props}
       />
