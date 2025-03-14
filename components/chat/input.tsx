@@ -60,8 +60,8 @@ export default function ChatInput({
                         {...field}
                         onChange={handleInputChange}
                         value={input}
-                        onEnterPress={handleEnterPress} // Custom handler for Enter key
-                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-lg"
+                        onEnterPress={handleEnterPress}
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 bg-[#FCF1E0] rounded-lg mr-3" // Added margin-right
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         placeholder="Type your message here..."
@@ -72,10 +72,10 @@ export default function ChatInput({
               />
               <Button
                 type="submit"
-                className="rounded-full w-10 h-10 p-0 flex items-center justify-center"
+                className="rounded-full w-12 h-12 p-2 flex items-center justify-center" // Adjusted size for spacing
                 disabled={input.trim() === "" || isLoading}
               >
-                <ArrowUp className="w-5 h-5" />
+                <ArrowUp className="w-6 h-6" />
               </Button>
             </form>
           </Form>
