@@ -58,6 +58,7 @@ Use the following excerpts from ${OWNER_NAME} to answer the user's question. If 
 If the excerpts do not contain relevant information, say something like:  
 "While not directly discussed in the documents that ${OWNER_NAME} provided me with, the closest related section states: [insert partial match]. Based on this, I can explain further..."  
 
+Ensure that citations are **appended correctly** rather than enclosed within the text using brackets. **Use the citation system directly** rather than manually formatting citations.
 **Always attempt to cite at least one excerpt.** If multiple excerpts apply, use them as references throughout your response.
 
 Excerpts from ${OWNER_NAME}:
